@@ -5,6 +5,8 @@ require 'akka'
 
 
 module Mikka
+  import java.util.Arrays
+  
   def self.actor_of(*args, &block)
     Akka::Actor::Actors.actor_of(*args, &block)
   end
@@ -16,8 +18,18 @@ module Mikka
   def self.registry
     Akka::Actor::Actors.registry
   end
-
-  class Actor < Akka::Actor::UntypedActor
+  
+  module Messages
+    def self.broadcast(message)
+      Akka::Routing::Routing::Broadcast.new(message)
+    end
+  
+    def self.poison_pill
+      Akka::Actor::Actors.poison_pill
+    end
+  end
+  
+  module RubyesqueCallbacks
     def receive(message); end
     def pre_start; end
     def post_stop; end
@@ -31,9 +43,23 @@ module Mikka
     def postRestart(reason); super; post_restart(reason); end
   end
   
+  class Actor < Akka::Actor::UntypedActor
+    include RubyesqueCallbacks
+  end
+  
   class ProcActor < Actor
     def initialize(&receive)
       define_singleton_method(:receive, receive)
+    end
+  end
+  
+  class LoadBalancer < Akka::Routing::UntypedLoadBalancer
+    attr_reader :seq
+        
+    def initialize(*actors)
+      super()
+      actors = Arrays.as_list(actors.map { |a| a.start }.to_java)
+      @seq = Akka::Routing::CyclicIterator.new(actors)
     end
   end
 end
