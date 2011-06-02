@@ -5,13 +5,18 @@ require 'akka'
 
 
 module Mikka
-  def self.actor_of(*args)
-    if block_given?
-    then Akka::Actor::Actors.actor_of { ProcActor.new(&Proc.new) }
-    else Akka::Actor::Actors.actor_of(*args)
-    end
+  def self.actor_of(*args, &block)
+    Akka::Actor::Actors.actor_of(*args, &block)
   end
   
+  def self.actor(&block)
+    Akka::Actor::Actors.actor_of { ProcActor.new(&block) }
+  end
+  
+  def self.registry
+    Akka::Actor::Actors.registry
+  end
+
   class Actor < Akka::Actor::UntypedActor
     def receive(message); end
     def pre_start; end
@@ -20,10 +25,10 @@ module Mikka
     def post_restart(reason); end
     
     def onReceive(message); receive(message); end
-    def preStart; pre_start; end
-    def postStop; post_stop; end
-    def preRestart(reason); pre_restart(reason); end
-    def postRestart(reason); post_restart(reason); end
+    def preStart; super; pre_start; end
+    def postStop; super; post_stop; end
+    def preRestart(reason); super; pre_restart(reason); end
+    def postRestart(reason); super; post_restart(reason); end
   end
   
   class ProcActor < Actor

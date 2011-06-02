@@ -5,7 +5,7 @@ $: << File.expand_path('../../lib', __FILE__)
 require 'mikka'
 
 
-actor = Mikka.actor_of do |message|
+actor = Mikka.actor do |message|
   case message
   when 'hi'
     puts "hello yourself"
