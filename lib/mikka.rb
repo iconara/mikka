@@ -29,7 +29,7 @@ module Mikka
     end
   end
   
-  module RubyesqueCallbacks
+  module RubyesqueActorCallbacks
     def receive(message); end
     def pre_start; end
     def post_stop; end
@@ -44,7 +44,7 @@ module Mikka
   end
   
   class Actor < Akka::Actor::UntypedActor
-    include RubyesqueCallbacks
+    include RubyesqueActorCallbacks
   end
   
   class ProcActor < Actor
@@ -54,16 +54,8 @@ module Mikka
   end
   
   def self.load_balancer(*actors)
-    Mikka.actor_of { LoadBalancer.new(*actors) }.start
-  end
-  
-  class LoadBalancer < Akka::Routing::UntypedLoadBalancer
-    attr_reader :seq
-        
-    def initialize(*actors)
-      super()
-      actors = Arrays.as_list(actors.map { |a| a.start }.to_java)
-      @seq = Akka::Routing::CyclicIterator.new(actors)
-    end
+    actors = Arrays.as_list(actors.map { |a| a.start }.to_java)
+    actors_seq = Akka::Routing::CyclicIterator.new(actors)
+    Akka::Routing::Routing.load_balancer_actor(proc { actors_seq }.to_function)
   end
 end

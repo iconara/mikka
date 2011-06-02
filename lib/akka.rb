@@ -10,6 +10,8 @@ $CLASSPATH << $AKKA_CONFIG_HOME
 require "#{$AKKA_LIB_HOME}/scala-library.jar"
 require "#{$AKKA_LIB_HOME}/akka/akka-actor-1.1.2"
 
+require 'ext/scala'
+
 
 module Akka
   module Actor
