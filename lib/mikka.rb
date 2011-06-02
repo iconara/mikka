@@ -53,6 +53,10 @@ module Mikka
     end
   end
   
+  def self.load_balancer(*actors)
+    Mikka.actor_of { LoadBalancer.new(*actors) }.start
+  end
+  
   class LoadBalancer < Akka::Routing::UntypedLoadBalancer
     attr_reader :seq
         
