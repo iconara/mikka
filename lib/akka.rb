@@ -1,10 +1,14 @@
 # encoding: utf-8
 
-$AKKA_HOME = File.expand_path('../ext/akka-actors-1.1.2', __FILE__)
-$CLASSPATH << "#{$AKKA_HOME}/config"
+require 'java'
 
-require "#{$AKKA_HOME}/lib/scala-library.jar"
-require "#{$AKKA_HOME}/lib/akka/akka-actor-1.1.2"
+$AKKA_HOME = File.expand_path('../ext/akka-actors-1.1.2', __FILE__)
+$AKKA_LIB_HOME = "#{$AKKA_HOME}/lib"
+$AKKA_CONFIG_HOME = "#{$AKKA_HOME}/config"
+$CLASSPATH << $AKKA_CONFIG_HOME
+
+require "#{$AKKA_LIB_HOME}/scala-library.jar"
+require "#{$AKKA_LIB_HOME}/akka/akka-actor-1.1.2"
 
 
 module Akka
