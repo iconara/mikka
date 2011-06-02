@@ -13,26 +13,17 @@ module Mikka
   end
   
   class Actor < Akka::Actor::UntypedActor
+    def receive(message); end
+    def pre_start; end
+    def post_stop; end
+    def pre_restart(reason); end
+    def post_restart(reason); end
+    
     def onReceive(message); receive(message); end
     def preStart; pre_start; end
     def postStop; post_stop; end
     def preRestart(reason); pre_restart(reason); end
     def postRestart(reason); post_restart(reason); end
-
-    def receive(message)
-    end
-
-    def pre_start
-    end
-
-    def post_stop
-    end
-
-    def pre_restart(reason)
-    end
-
-    def post_restart(reason)
-    end
   end
   
   class ProcActor < Actor
