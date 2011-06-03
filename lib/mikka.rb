@@ -43,7 +43,60 @@ module Mikka
     def postRestart(reason); super; post_restart(reason); end
   end
   
+  module SupervisionDsl
+    module ClassMethods
+      def fault_handling(config)
+        trap = config[:trap].map { |e| e.java_class }
+        max_retries = config.fetch(:max_retries, 5)
+        time_range = config.fetch(:time_range, 5000)
+        case config[:strategy]
+        when :all_for_one
+          @fault_handling_strategy = Akka::Config::Supervision::AllForOneStrategy.new(trap, max_retries, time_range)
+        when :one_for_one
+          @fault_handling_strategy = Akka::Config::Supervision::OneForOneStrategy.new(trap, max_retries, time_range)
+        else
+          raise ArgumentError, 'strategy must be one of :all_for_one or :one_for_one'
+        end
+      end
+    
+      def registered_fault_handling_strategy
+        @fault_handling_strategy
+      end
+    
+      def life_cycle(type)
+        @life_cycle = case type
+                      when :permanent then Akka::Config::Supervision.permanent
+                      when :temporary then Akka::Config::Supervision.temporary
+                      when :undefined then Akka::Config::Supervision.undefined_life_cycle
+                      else raise ArgumentError, 'type must be one of :permanent, :temporary or :undefined'
+                      end
+      end
+    
+      def registered_life_cycle
+        @life_cycle
+      end
+    end
+    
+    module InstanceMethods
+      def initialize(*args)
+        super
+        if self.class.registered_fault_handling_strategy
+          context.fault_handler = self.class.registered_fault_handling_strategy
+        end
+        if self.class.registered_life_cycle
+          context.life_cycle = self.class.registered_life_cycle
+        end
+      end
+    end
+    
+    def self.included(m)
+      m.extend(ClassMethods)
+      m.include(InstanceMethods)
+    end
+  end
+  
   class Actor < Akka::Actor::UntypedActor
+    include SupervisionDsl
     include RubyesqueActorCallbacks
   end
   
@@ -61,7 +114,8 @@ module Mikka
       raise ArgumentError, "Either :actors or :type and :count must be specified" unless type && count
       actors = (0...count).map { actor_of(type) }
     end
-    actor_list = Arrays.as_list(actors.map { |a| a.start }.to_java)
+    actors.each { |a| a.start }
+    actor_list = Arrays.as_list(actors.to_java)
     actor_seq = Akka::Routing::CyclicIterator.new(actor_list)
     actor_factory = proc { actor_seq }.to_function
     Akka::Routing::Routing.load_balancer_actor(actor_factory)
