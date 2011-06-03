@@ -53,9 +53,17 @@ module Mikka
     end
   end
   
-  def self.load_balancer(*actors)
-    actors = Arrays.as_list(actors.map { |a| a.start }.to_java)
-    actors_seq = Akka::Routing::CyclicIterator.new(actors)
-    Akka::Routing::Routing.load_balancer_actor(proc { actors_seq }.to_function)
+  def self.load_balancer(options={})
+    actors = options[:actors]
+    unless actors
+      type = options[:type]
+      count = options[:count]
+      raise ArgumentError, "Either :actors or :type and :count must be specified" unless type && count
+      actors = (0...count).map { actor_of(type) }
+    end
+    actor_list = Arrays.as_list(actors.map { |a| a.start }.to_java)
+    actor_seq = Akka::Routing::CyclicIterator.new(actor_list)
+    actor_factory = proc { actor_seq }.to_function
+    Akka::Routing::Routing.load_balancer_actor(actor_factory)
   end
 end
