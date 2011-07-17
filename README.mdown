@@ -2,7 +2,11 @@
 
 Mikka is a thin Ruby wrapper around Akka. It makes Akka's Java API more pleasing to the Rubyist's eye.
 
+## Work in progress
+
 Mikka is a work in progress, but currently used in production. Check out the examples directory for the basics.
+
+It's only tested in JRuby 1.6.2 and Ruby 1.9 mode (add `jruby --1.9` or set `JRUBY_OPTS='--1.9`).
 
 ## Mikka?
 
