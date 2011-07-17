@@ -34,8 +34,8 @@ class Manager < Mikka::Actor
   fault_handling :strategy => :all_for_one, :trap => [java.lang.Exception], :max_retries => 3, :time_range => 3000
   
   def pre_start
-    @worker1 = Mikka.actor_of(Worker)
-    @worker2 = Mikka.actor_of(Worker)
+    @worker1 = Mikka.actor_of { Worker.new }
+    @worker2 = Mikka.actor_of { Worker.new }
     @worker1.id = 'worker1'
     @worker2.id = 'worker2'
     context.start_link(@worker1)
