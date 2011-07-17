@@ -1,0 +1,9 @@
+# Mikka
+
+Mikka is a thin Ruby wrapper around Akka. It makes Akka's Java API more pleasing to the Rubyist's eye.
+
+Mikka is a work in progress, but currently used in production. Check out the examples directory for the basics.
+
+## Mikka?
+
+Mikka is a glacier close to the Akka massive.
