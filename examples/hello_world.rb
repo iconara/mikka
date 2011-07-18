@@ -28,18 +28,7 @@ phil = Mikka.actor do |msg|
     # The `Introduction` class has a field called `to_whom` that contains a
     # reference to an actor that someone want to introduce us to. Let's send
     # that actor a `Greeting`. 
-    # 
-    # Instead of using the << operator to send a message, here we use the more
-    # explict #send_one_way, because we want to pass the sender (i.e. ourself)
-    # so that the receiver can reply. This is much more elegant in Scala,
-    # where the sender is implicitly inferred at the time of the call. In Ruby
-    # (and in Java) we need to remember to pass the sender along manually.
-    #
-    # The second argument to #send_one_way is the sender, i.e. this actor, or
-    # rather the `ActorRef` that fronts this actor. In Scala it would be 
-    # referred to as `self`, but in the Java API it's called `context` (which
-    # is good news for us Rubyists).
-    msg.to_whom.send_one_way(Greeting.new('Hello, dear sir.'), context)
+    msg.to_whom << Greeting.new('Hello, dear sir.')
   when Greeting
     puts "Received greeting: #{msg.body}"
     # 12.
@@ -64,18 +53,17 @@ class Replier < Mikka::Actor
     when Greeting
       puts "Received greeting: #{msg.body}"
       # 10.
-      # Since this message had a sender (see 9) we can use #reply to send a
-      # message back without having an explicit reference to the actor that
-      # sent the message (if you, however, want to store the sender and reply
-      # later you can retrieve it using `context.sender.get` and then use <<
-      # or #send_one_way to send a message to it, that is basically what 
-      # #reply does).
+      # To reply to a message without having to explicitly refer to the sender
+      # use #reply (you can, however, store the sender and reply later if you
+      # want, it is available through `context.sender.get`).
       #
-      # A word of caution: since the sender has to be explicitly passed when
-      # sending the message it is not advisable to assume that the sender will
-      # always be set. You can use #reply_safe to avoid errors being raised
-      # (it will return true or false depending on whether it could send the
-      # reply or not).
+      # A word of caution: the sender is not always set, for example when the
+      # message was sent from a non-actor context like in 6. Also, the Scala 
+      # API sets the sender implicitly in a way that is not possible in Java 
+      # or Ruby, and even if Mikka does it's best to emulate the Scala way,
+      # it's not foolproof. If you want to guard agains errors when replying
+      # you can use #reply_safe instead of #reply. It will return true if the
+      # message could be sent, and false otherwise.
       context.reply(Greeting.new('Why, hello old chap.'))
       # 11.
       # Now we're through with this actor, so we shut it down.
@@ -107,8 +95,7 @@ sam.start
 # And finally, this is how to send a message to an actor. In Erlang and Scala
 # it is done with !, but that operator is not overridable in Ruby, so we have
 # to make do with <<. The Akka Java API defines #send_one_way (actually
-# sendOneWay, but JRuby fixes the casing for us), which can also be used (and
-# must be used if you want to be able to reply to messages).
+# sendOneWay, but JRuby fixes the casing for us), which can also be used.
 #
 # Here we send a message to `phil`, the message is an object that contains a
 # reference to the actor `sam`.

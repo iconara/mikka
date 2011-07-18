@@ -19,6 +19,10 @@ module Mikka
     Akka::Actor::Actors.registry
   end
   
+  def self.current_actor
+    Thread.current[:mikka_current_actor]
+  end
+  
   module Messages
     def self.broadcast(message)
       Akka::Routing::Routing::Broadcast.new(message)
@@ -41,6 +45,29 @@ module Mikka
     def postStop; super; post_stop; end
     def preRestart(reason); super; pre_restart(reason); end
     def postRestart(reason); super; post_restart(reason); end
+  end
+  
+  module ImplicitSender
+    def capture_current_actor
+      Thread.current[:mikka_current_actor] = context
+      yield
+    ensure
+      Thread.current[:mikka_current_actor] = nil
+    end
+    
+    def self.included(mod)
+      mod.class_eval do
+        [:onReceive, :preStart, :postStop, :preRestart, :postRestart].each do |method_name|
+          actual_method_name = :"__actual_#{method_name}"
+          alias_method actual_method_name, method_name
+          define_method method_name do |*args|
+            capture_current_actor do
+              send(actual_method_name, *args)
+            end
+          end
+        end
+      end
+    end
   end
   
   module SupervisionDsl
@@ -98,6 +125,7 @@ module Mikka
   class Actor < Akka::Actor::UntypedActor
     include SupervisionDsl
     include RubyesqueActorCallbacks
+    include ImplicitSender
   end
   
   class ProcActor < Actor
@@ -119,5 +147,15 @@ module Mikka
     actor_seq = Akka::Routing::CyclicIterator.new(actor_list)
     actor_factory = proc { actor_seq }.to_function
     Akka::Routing::Routing.load_balancer_actor(actor_factory)
+  end
+end
+
+module Akka
+  module Actor
+    module ActorRef
+      def <<(message)
+        send_one_way(message, Mikka.current_actor)
+      end
+    end
   end
 end

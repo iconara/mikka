@@ -20,12 +20,6 @@ module Akka
     import 'akka.actor.ActorRef'
     import 'akka.actor.UntypedActor'
 
-    module ActorRef
-      def <<(message)
-        send_one_way(message)
-      end
-    end
-
     class UntypedActor
       def self.create(*args)
         new(*args)
