@@ -8,7 +8,7 @@ require 'mikka/version'
 Gem::Specification.new do |s|
   s.name        = 'mikka'
   s.version     = Mikka::VERSION
-  s.platform    = Gem::Platform::CURRENT
+  s.platform    = 'java'
   s.authors     = ['Theo Hultberg']
   s.email       = ['theo@iconara.net']
   s.homepage    = 'http://github.com/iconara/mikka'
