@@ -1,22 +1,13 @@
 # encoding: utf-8
 
 require 'java'
-
-$AKKA_HOME = File.expand_path('../ext/akka-actors-1.1.2', __FILE__)
-$AKKA_LIB_HOME = "#{$AKKA_HOME}/lib"
-$AKKA_CONFIG_HOME = "#{$AKKA_HOME}/config"
-$CLASSPATH << $AKKA_CONFIG_HOME
-
-require "#{$AKKA_LIB_HOME}/scala-library.jar"
-require "#{$AKKA_LIB_HOME}/akka/akka-actor-1.1.2"
-
-require 'ext/scala'
+require 'akka-actor-jars'
 
 
 module Akka
   module Actor
     include_package 'akka.actor'
-    
+
     import 'akka.actor.ActorRef'
     import 'akka.actor.UntypedActor'
 
