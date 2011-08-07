@@ -16,6 +16,8 @@ Gem::Specification.new do |s|
   s.description = %q{Mikka adapts Akka's Java API to fit better with Ruby}
 
   s.rubyforge_project = 'mikka'
+  
+  s.add_dependency 'akka-actor-jars', '~> 1.1.0'
 
   s.files         = `git ls-files`.split("\n")
   # s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
