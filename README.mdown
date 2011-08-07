@@ -4,19 +4,21 @@ Mikka is a thin Ruby wrapper around Akka. It makes Akka's Java API more pleasing
 
 ## Work in progress
 
-Mikka is a work in progress, but currently used in production. Check out the `examples` directory for the basics. Start with the `hello_world.rb` example, it is extensively documented and goes through the basics.
+Mikka is a work in progress, but currently used in production. It currently mostly scratches my own itchs, but improvement suggestions and patches are welcome. 
 
-If you make something that can serve as a useful illustration of some concept, please contribute by sending a pull request.
+Check out the `examples` directory for the basics. Start with the `hello_world.rb` example, it is extensively documented and goes through the basics.
 
-There is currently no gem released on rubygems.org, but if you use Bundler you can add Mikka to your dependencies like this:
-
-    gem 'mikka', :git => 'http://github.com/iconara/mikka.git'
+If you make something that can serve as a useful illustration of some concept, please contribute by sending a patch.
 
 ## Requirements
 
-Only tested in JRuby 1.6.2 and Ruby 1.9 mode (add `jruby --1.9` or set `JRUBY_OPTS='--1.9`).
+Only tested in JRuby 1.6.3 and Ruby 1.9 mode (add `jruby --1.9` or set `JRUBY_OPTS='--1.9`).
 
-All the required Akka JARs are bundled (currently v1.1.2).
+The required Akka and Scala JARs are loaded from the [akka-actor-jars](https://rubygems.org/gems/akka-actor-jars) and [scala-library-jars](https://rubygems.org/gems/scala-library-jars) wrapper gems.
+
+## Installation
+
+    gem install mikka
 
 ## Contributors
 
