@@ -1,5 +1,5 @@
 # encoding: utf-8
 
 module Mikka
-  VERSION = '1.0.1'
+  VERSION = '1.1.0'
 end
