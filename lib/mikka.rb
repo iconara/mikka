@@ -34,12 +34,23 @@ module Mikka
   end
   
   module Remote
-    def self.start(options={})
-      Akka::Actors.remote.start(options.fetch(:host, 'localhost'), options.fetch(:port, 2552))
+    DEFAULT_HOST = 'localhost'
+    DEFAULT_PORT = 2552
+    
+    def self.start(options=nil)
+      if options
+      then remote_support.start(options.fetch(:host, DEFAULT_HOST), options.fetch(:port, DEFAULT_PORT))
+      else remote_support.start
+      end
     end
     
     def self.actor_for(id, options={})
-      Akka::Actors.remote.actor_for(id, options.fetch(:host, 'localhost'), options.fetch(:port, 2552))
+      remote_support.actor_for(id, options.fetch(:host, DEFAULT_HOST), options.fetch(:port, DEFAULT_PORT))
+    end
+    
+  private
+    def self.remote_support
+      Akka::Actors.remote
     end
   end
   
