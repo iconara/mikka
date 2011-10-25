@@ -33,6 +33,18 @@ module Mikka
     end
   end
   
+  module Remote
+    def self.start(options={})
+      raise ArgumentError, %(No port given) unless options.key?(:port)
+      Akka::Actors.remote.start(options.fetch(:host, 'localhost'), options[:port])
+    end
+    
+    def self.actor_for(id, options={})
+      raise ArgumentError, %(No port given) unless options.key?(:port)
+      Akka::Actors.remote.actor_for(id, options.fetch(:host, 'localhost'), options[:port])
+    end
+  end
+  
   module RubyesqueActorCallbacks
     def receive(message); end
     def pre_start; end

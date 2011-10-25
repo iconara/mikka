@@ -2,9 +2,12 @@
 
 require 'java'
 require 'akka-actor-jars'
+require 'akka-remote-jars'
 
 
 module Akka
+  import 'akka.actor.Actors'
+  
   module Actor
     include_package 'akka.actor'
 
