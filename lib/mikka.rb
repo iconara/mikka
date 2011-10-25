@@ -101,12 +101,14 @@ module Mikka
       end
     
       def life_cycle(type)
-        @life_cycle = case type
-                      when :permanent then Akka::Config::Supervision.permanent
-                      when :temporary then Akka::Config::Supervision.temporary
-                      when :undefined then Akka::Config::Supervision.undefined_life_cycle
-                      else raise ArgumentError, 'type must be one of :permanent, :temporary or :undefined'
-                      end
+        @life_cycle = begin
+          case type
+          when :permanent then Akka::Config::Supervision.permanent
+          when :temporary then Akka::Config::Supervision.temporary
+          when :undefined then Akka::Config::Supervision.undefined_life_cycle
+          else raise ArgumentError, 'type must be one of :permanent, :temporary or :undefined'
+          end
+        end
       end
     
       def registered_life_cycle
