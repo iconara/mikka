@@ -35,13 +35,11 @@ module Mikka
   
   module Remote
     def self.start(options={})
-      raise ArgumentError, %(No port given) unless options.key?(:port)
-      Akka::Actors.remote.start(options.fetch(:host, 'localhost'), options[:port])
+      Akka::Actors.remote.start(options.fetch(:host, 'localhost'), options.fetch(:port, 2552))
     end
     
     def self.actor_for(id, options={})
-      raise ArgumentError, %(No port given) unless options.key?(:port)
-      Akka::Actors.remote.actor_for(id, options.fetch(:host, 'localhost'), options[:port])
+      Akka::Actors.remote.actor_for(id, options.fetch(:host, 'localhost'), options.fetch(:port, 2552))
     end
   end
   
