@@ -58,25 +58,33 @@ module Mikka
   end
   
   module ImplicitSender
+    def onReceive(*args)
+      capture_current_actor { super }
+    end
+    
+    def preStart(*args)
+      capture_current_actor { super }
+    end
+    
+    def postStop(*args)
+      capture_current_actor { super }
+    end
+    
+    def preRestart(*args)
+      capture_current_actor { super }
+    end
+    
+    def postRestart(*args)
+      capture_current_actor { super }
+    end
+    
+  private
+    
     def capture_current_actor
       Thread.current[:mikka_current_actor] = context
       yield
     ensure
       Thread.current[:mikka_current_actor] = nil
-    end
-    
-    def self.included(mod)
-      mod.class_eval do
-        [:onReceive, :preStart, :postStop, :preRestart, :postRestart].each do |method_name|
-          actual_method_name = :"__actual_#{method_name}"
-          alias_method actual_method_name, method_name
-          define_method method_name do |*args|
-            capture_current_actor do
-              send(actual_method_name, *args)
-            end
-          end
-        end
-      end
     end
   end
   
