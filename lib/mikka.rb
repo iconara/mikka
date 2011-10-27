@@ -184,6 +184,26 @@ module Mikka
     actor_factory = proc { actor_seq }.to_function
     Akka::Routing::Routing.load_balancer_actor(actor_factory)
   end
+  
+  def self.schedule(receiver_actor, message_to_be_sent, initial_delay_before_sending, delay_between_messages, time_unit=TimeUnit::SECONDS)
+    Akka::Actor::Scheduler.schedule(receiver_actor, message_to_be_sent, initial_delay_before_sending, delay_between_messages, time_unit)
+  end
+  
+  def self.schedule_once(receiver_actor, message_to_be_sent, delay_until_send, time_unit=TimeUnit::SECONDS)
+    Akka::Actor::Scheduler.schedule_once(receiver_actor, message_to_be_sent, delay_until_send, time_unit)
+  end
+  
+  class TimeUnit
+    import java.util.concurrent.TimeUnit
+    
+    DAY         = DAYS         = TimeUnit::DAYS
+    HOUR        = HOURS        = TimeUnit::HOURS
+    MICROSECOND = MICROSECONDS = TimeUnit::MICROSECONDS
+    MILLISECOND = MILLISECONDS = TimeUnit::MILLISECONDS
+    MINUTE      = MINUTES      = TimeUnit::MINUTES
+    NANOSECOND  = NANOSECONDS  = TimeUnit::NANOSECONDS
+    SECOND      = SECONDS      = TimeUnit::SECONDS
+  end
 end
 
 module Akka
