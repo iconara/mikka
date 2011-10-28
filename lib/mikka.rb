@@ -185,15 +185,20 @@ module Mikka
     Akka::Routing::Routing.load_balancer_actor(actor_factory)
   end
   
-  def self.schedule(receiver_actor, message_to_be_sent, initial_delay_before_sending, delay_between_messages, time_unit=TimeUnit::SECONDS)
-    Akka::Actor::Scheduler.schedule(receiver_actor, message_to_be_sent, initial_delay_before_sending, delay_between_messages, time_unit)
+  module Scheduling
+    extend self
+    
+    def schedule(receiver_actor, message_to_be_sent, initial_delay_before_sending, delay_between_messages, time_unit=TimeUnit::SECONDS)
+      Akka::Actor::Scheduler.schedule(receiver_actor, message_to_be_sent, initial_delay_before_sending, delay_between_messages, TimeUnit.parse(time_unit))
+    end
+  
+    def schedule_once(receiver_actor, message_to_be_sent, delay_until_send, time_unit=TimeUnit::SECONDS)
+      Akka::Actor::Scheduler.schedule_once(receiver_actor, message_to_be_sent, delay_until_send, TimeUnit.parse(time_unit))
+    end
   end
   
-  def self.schedule_once(receiver_actor, message_to_be_sent, delay_until_send, time_unit=TimeUnit::SECONDS)
-    Akka::Actor::Scheduler.schedule_once(receiver_actor, message_to_be_sent, delay_until_send, time_unit)
-  end
-  
-  class TimeUnit
+  module TimeUnit
+    extend self
     import java.util.concurrent.TimeUnit
     
     DAY         = DAYS         = TimeUnit::DAYS
@@ -203,6 +208,31 @@ module Mikka
     MINUTE      = MINUTES      = TimeUnit::MINUTES
     NANOSECOND  = NANOSECONDS  = TimeUnit::NANOSECONDS
     SECOND      = SECONDS      = TimeUnit::SECONDS
+    
+    SYM_TO_UNIT = {
+      :day          => DAY,
+      :days         => DAYS,
+      :hour         => HOUR,
+      :hours        => HOURS,
+      :microsecond  => MICROSECOND,
+      :microseconds => MICROSECONDS,
+      :millisecond  => MILLISECOND,
+      :milliseconds => MILLISECONDS,
+      :minute       => MINUTE,
+      :minutes      => MINUTES,
+      :nanosecond   => NANOSECOND,
+      :nanoseconds  => NANOSECONDS,
+      :second       => SECOND,
+      :seconds      => SECONDS
+    }.freeze
+    
+    def parse(time_unit)
+      if time_unit.class == Symbol
+        raise(ArgumentError, "#{time_unit} if not a valid time_unit") unless SYM_TO_UNIT.key?(time_unit)
+        return SYM_TO_UNIT[time_unit]
+      end
+      time_unit
+    end
   end
 end
 
