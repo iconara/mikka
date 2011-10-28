@@ -95,8 +95,7 @@ sam.start
 # 6.
 # And finally, this is how to send a message to an actor. In Erlang and Scala
 # it is done with !, but that operator is not overridable in Ruby, so we have
-# to make do with <<. The Akka Java API defines #send_one_way (actually
-# sendOneWay, but JRuby fixes the casing for us), which can also be used.
+# to make do with <<. The Akka Java API defines #tell, which can also be used.
 #
 # Here we send a message to `phil`, the message is an object that contains a
 # reference to the actor `sam`.

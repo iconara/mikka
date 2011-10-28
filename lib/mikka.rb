@@ -190,7 +190,7 @@ module Akka
   module Actor
     module ActorRef
       def <<(message)
-        send_one_way(message, Mikka.current_actor)
+        tell(message, Mikka.current_actor)
       end
     end
   end
