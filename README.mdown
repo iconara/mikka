@@ -12,9 +12,9 @@ If you make something that can serve as a useful illustration of some concept, p
 
 ## Requirements
 
-Only tested in JRuby 1.6.3 and Ruby 1.9 mode (add `jruby --1.9` or set `JRUBY_OPTS='--1.9`).
+Only tested in JRuby 1.6.3+ and Ruby 1.9 mode (run with `jruby --1.9` or set `JRUBY_OPTS='--1.9`).
 
-The required Akka and Scala JARs are loaded from the [akka-actor-jars](https://rubygems.org/gems/akka-actor-jars) and [scala-library-jars](https://rubygems.org/gems/scala-library-jars) wrapper gems.
+The required Akka and Scala JARs are loaded from the [akka-actor-jars](https://rubygems.org/gems/akka-actor-jars), [akka-remote-jars](https://rubygems.org/gems/akka-remote-jars) and [scala-library-jars](https://rubygems.org/gems/scala-library-jars) wrapper gems.
 
 ## Installation
 
@@ -26,7 +26,7 @@ Theo Hultberg, [@iconara](http://twitter.com/iconara)
 
 ## License
 
-Mikka is licensed under the Apache 2 license, the same as Akka. See http://akka.io/docs/akka/1.1.2/project/licenses.html
+Mikka is licensed under the Apache 2 license, the same as Akka. See http://akka.io/docs/akka/1.2/project/licenses.html
 
 ## Mikka?
 
