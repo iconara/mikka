@@ -23,6 +23,7 @@ The required Akka and Scala JARs are loaded from the [akka-actor-jars](https://r
 ## Contributors
 
 Theo Hultberg, [@iconara](http://twitter.com/iconara)
+Daniel Gaiottino, [@bantai](http://twitter.com/bantai)
 
 ## License
 

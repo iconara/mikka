@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.name        = 'mikka'
   s.version     = Mikka::VERSION
   s.platform    = 'java'
-  s.authors     = ['Theo Hultberg']
-  s.email       = ['theo@iconara.net']
+  s.authors     = ['Theo Hultberg', 'Daniel Gaiottino']
+  s.email       = ['theo@iconara.net', 'daniel.gaiottino@gmail.com']
   s.homepage    = 'http://github.com/iconara/mikka'
   s.summary     = %q{Mikka is a JRuby wrapper for Akka}
   s.description = %q{Mikka adapts Akka's Java API to fit better with Ruby}
