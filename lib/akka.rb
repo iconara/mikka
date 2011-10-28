@@ -13,6 +13,7 @@ module Akka
 
     import 'akka.actor.ActorRef'
     import 'akka.actor.UntypedActor'
+    import 'akka.actor.Scheduler'
 
     class UntypedActor
       def self.create(*args)
