@@ -24,32 +24,37 @@ module Mikka
   end
   
   module Messages
-    def self.broadcast(message)
+    extend self
+    
+    def broadcast(message)
       Akka::Routing::Routing::Broadcast.new(message)
     end
   
-    def self.poison_pill
+    def poison_pill
       Akka::Actor::Actors.poison_pill
     end
   end
   
   module Remote
+    extend self
+    
     DEFAULT_HOST = 'localhost'
     DEFAULT_PORT = 2552
     
-    def self.start(options=nil)
+    def start(options=nil)
       if options
       then remote_support.start(options.fetch(:host, DEFAULT_HOST), options.fetch(:port, DEFAULT_PORT))
       else remote_support.start
       end
     end
     
-    def self.actor_for(id, options={})
+    def actor_for(id, options={})
       remote_support.actor_for(id, options.fetch(:host, DEFAULT_HOST), options.fetch(:port, DEFAULT_PORT))
     end
     
   private
-    def self.remote_support
+
+    def remote_support
       Akka::Actors.remote
     end
   end
