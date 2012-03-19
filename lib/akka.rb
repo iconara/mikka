@@ -1,32 +1,25 @@
 # encoding: utf-8
 
 require 'java'
-require 'akka-actor-jars'
-require 'akka-remote-jars'
+
+Dir[File.expand_path('../ext/*.jar', __FILE__)].each { |path| require(path) }
 
 
 module Akka
-  import 'akka.actor.Actors'
-  
   module Actor
-    include_package 'akka.actor'
-
-    import 'akka.actor.ActorRef'
-    import 'akka.actor.UntypedActor'
-    import 'akka.actor.Scheduler'
-
-    class UntypedActor
-      def self.create(*args)
-        new(*args)
-      end
-    end
+    java_import 'akka.actor.ActorSystem'
+    java_import 'akka.actor.ActorRef'
+    java_import 'akka.actor.UntypedActor'
+    java_import 'akka.actor.Props'
+    java_import 'akka.actor.Terminated'
   end
-  
-  module Config
-    include_package 'akka.config'
+
+  module Dispatch
+    java_import 'akka.dispatch.Await'
   end
-  
-  module Routing
-    include_package 'akka.routing'
+
+  module Util
+    java_import 'akka.util.Duration'
+    java_import 'akka.util.Timeout'
   end
 end
