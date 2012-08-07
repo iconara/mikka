@@ -36,7 +36,7 @@ module Mikka
   class Props
     def self.[](*args, &block)
       options = args.last.is_a?(Hash) && args.pop
-      creator = (args.first.is_a?(Class) && args.first) || (options && options[:creator]) || block
+      creator = ((args.first.is_a?(Proc) || args.first.is_a?(Class)) && args.first) || (options && options[:creator]) || block
       raise ArgumentError, %(No creator specified) unless creator
       props = new
       props = props.with_creator(creator)
