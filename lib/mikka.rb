@@ -105,8 +105,17 @@ module Mikka
       alias_method :create, :new
     end
   end
+
+  module PropsConstructor
+    def Props(&block)
+      Props.create(&block)
+    end
+  end
   
   module Useful
+    include PropsConstructor
+    extend PropsConstructor
+
     Props = ::Mikka::Props
   end
 end

@@ -35,6 +35,12 @@ module Mikka
       actor.should be_a(ActorRef)
     end
 
+    it 'creates an actor from a factory block passed to the Props function' do
+      actor_props = Useful.Props { TestActor.new }
+      actor = @system.actor_of(actor_props, 'some_actor')
+      actor.should be_a(ActorRef)
+    end
+
     # future = actor.ask(:hi, 1000)
     # reply = Mikka.await_result(future, :timeout => '1000ms')
     # reply.should == :hi
