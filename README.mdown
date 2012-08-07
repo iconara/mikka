@@ -4,7 +4,7 @@ Mikka is a thin Ruby wrapper around Akka. It makes Akka's Java API more pleasing
 
 ## Examples
 
-v2.0 is a work in progress, but here's a quick example:
+Here's a quick example:
 
     # first you need an ActorSystem, it contains configuration and coordinates actors
     actor_system = Mikka.create_actor_system('systam')
