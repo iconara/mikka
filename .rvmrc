@@ -1,1 +1,1 @@
-rvm --create use jruby-1.6.5@mikka
+rvm --create use jruby-1.6.7@mikka
