@@ -17,8 +17,8 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = 'mikka'
   
-  s.add_dependency 'akka-actor-jars', '~> 1.2.0'
-  s.add_dependency 'akka-remote-jars', '~> 1.2.0'
+  # s.add_dependency 'akka-actor-jars', '~> 1.2.0'
+  # s.add_dependency 'akka-remote-jars', '~> 1.2.0'
 
   s.files         = `git ls-files`.split("\n")
   # s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
