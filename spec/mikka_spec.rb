@@ -10,7 +10,7 @@ module Mikka
 
   describe 'actor creation' do
     before do
-      @system = Mikka.create_actor_system('test_system')
+      @system = Mikka.create_actor_system('testsystem')
     end
 
     after do
