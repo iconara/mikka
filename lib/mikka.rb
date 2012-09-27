@@ -68,6 +68,7 @@ module Mikka
     def post_restart(reason); end
 
     def onReceive(message); receive(message); end
+    def supervisorStrategy; supervisor_strategy; end        
     def preStart; super; pre_start; end
     def postStop; super; post_stop; end
     def preRestart(reason, message_option) 
@@ -121,5 +122,34 @@ module Mikka
 
     Props = ::Mikka::Props
   end
+  
+  module SupervisionDecider
+    class DeciderAdapter
+      include Akka::Japi::Function
+      def initialize(&block)
+        @apply_block = block
+      end
+      def apply(e)
+        # SupervisorStrategy defines methods :escalate, :stop, :restart, :resume
+        Akka::Actor::SupervisorStrategy.send(@apply_block.call(e))        
+      end
+    end    
+  end
+
+  class AllForOneStrategy < Akka::Actor::AllForOneStrategy 
+    # Constructor expects a block taking 1 argument for exception
+    # and returning :escalate, :stop, :restart, or :resume
+    def initialize(max_number_of_retries, within_time_range, &block)
+      super(max_number_of_retries, within_time_range, SupervisionDecider::DeciderAdapter.new(&block))
+    end      
+  end
+
+  class OneForOneStrategy < Akka::Actor::OneForOneStrategy
+    # Constructor expects a block taking 1 argument for exception
+    # and returning :escalate, :stop, :restart, or :resume    
+    def initialize(max_number_of_retries, within_time_range, &block)            
+      super(max_number_of_retries, within_time_range, SupervisionDecider::DeciderAdapter.new(&block))      
+    end          
+  end    
 end
 
