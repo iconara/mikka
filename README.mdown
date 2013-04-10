@@ -6,31 +6,35 @@ Mikka is a thin Ruby wrapper around Akka. It makes Akka's Java API more pleasing
 
 Here's a quick example:
 
-    # first you need an ActorSystem, it contains configuration and coordinates actors
-    actor_system = Mikka.create_actor_system('systam')
+```ruby
+# first you need an ActorSystem, it contains configuration and coordinates actors
+actor_system = Mikka.create_actor_system('systam')
 
-    # actors are created by the ActorSystem from an instance of Props, which is
-    # a container for actor configuration properties -- here we assume there
-    # exists a class called SomeActor
-    actor = actor_system.actor_of(Mikka::Props[SomeActor], 'Sigourney Weaver')
+# actors are created by the ActorSystem from an instance of Props, which is
+# a container for actor configuration properties -- here we assume there
+# exists a class called SomeActor
+actor = actor_system.actor_of(Mikka::Props[SomeActor], 'Sigourney Weaver')
 
-    # send a message to an actor using the shovel operator, which is an alias for #tell
-    actor << :hello
+# send a message to an actor using the shovel operator, which is an alias for #tell
+actor << :hello
 
-    # when you're done you can shut down your actor system, and wait for it to 
-    # complete the shutdown process -- don't do this too early, this won't wait
-    # for your actors to complete processing of their mailboxes, it will just 
-    # tell them to stop
-    actor_system.shutdown
-    actor_system.await_termination
+# when you're done you can shut down your actor system, and wait for it to 
+# complete the shutdown process -- don't do this too early, this won't wait
+# for your actors to complete processing of their mailboxes, it will just 
+# tell them to stop
+actor_system.shutdown
+actor_system.await_termination
+```
 
 that's how you create and communicate with an actor, here's how you create an actor class:
 
-    class SomeActor < Mikka::Actor
-      def receive(message)
-        # do the thing
-      end
-    end
+```ruby
+class SomeActor < Mikka::Actor
+  def receive(message)
+    # do the thing
+  end
+end
+```
 
 that's the basics. v2.0 of Mikka is a work in progress, and there will hopefully be more examples in the future. Mikka is a thin wrapper and you should be able to do everything with it that you can with Akka's Java API. It's not always pretty in Ruby, but it kind of works. Mikka's job is to make it pretty.
 
