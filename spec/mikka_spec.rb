@@ -1,6 +1,5 @@
 require_relative 'spec_helper'
 
-
 module Mikka
   class TestActor < Mikka::Actor
     def receive(msg)
@@ -59,7 +58,7 @@ module Mikka
     end
 
     describe '#ask' do
-      it 'sends a message'
+      it 'sends a message' do
             # future = actor.ask(:hi, 1000)
       # reply = Mikka.await_result(future, :timeout => '1000ms')
       # reply.should == :hi
