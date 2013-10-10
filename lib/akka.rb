@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 require 'java'
+require 'typesafe-config-jars'
 require 'akka-actor-jars'
-
 
 module Akka
   module Actor
@@ -21,11 +21,11 @@ module Akka
   end
 
   module Dispatch
-    java_import 'akka.dispatch.Await'
+    java_import 'scala.concurrent.Await'
   end
 
   module Util
-    java_import 'akka.util.Duration'
+    java_import 'scala.concurrent.duration.Duration'
     java_import 'akka.util.Timeout'
   end
 end
