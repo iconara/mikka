@@ -4,7 +4,6 @@ $: << File.expand_path('../lib', __FILE__)
 
 require 'mikka/version'
 
-
 Gem::Specification.new do |s|
   s.name        = 'mikka'
   s.version     = Mikka::VERSION
@@ -17,7 +16,8 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = 'mikka'
   
-  s.add_dependency 'akka-actor-jars', '~> 2.0.2'
+  s.add_dependency 'typesafe-config-jars', '~> 1.0.2'
+  s.add_dependency 'akka-actor-jars', '~> 2.2.1'
 
   s.files         = `git ls-files`.split("\n")
   s.require_paths = %w(lib)
