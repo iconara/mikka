@@ -4,3 +4,5 @@
 /pkg/*
 /ext
 .DS_Store
+/.ruby-version
+/.ruby-gemset
